@@ -1,0 +1,77 @@
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_leads
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: leads_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8083:80"
+    volumes:
+      - ./src:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - backend
+      - db
+  mysql:
+    image: mysql:8
+    container_name: mysql_wordpress
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress_leads
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_password
+      WORDPRESS_DB_NAME: wordpress_db
+    ports:
+      - "8081:80"
+    volumes:
+      - ./frontend:/var/www/html
+
+  backend:
+    # build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: api_leads
+    restart: always
+    working_dir: /var/www
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: leads_db
+      DB_USERNAME: admin
+      DB_PASSWORD: admin123
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/var/www
