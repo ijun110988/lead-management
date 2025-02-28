@@ -4,30 +4,19 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class StaticTokenMiddleware
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
-        $providedToken = $request->bearerToken();
-        $expectedToken = config('app.api_token') ?? env('API_TOKEN');
+        $token = $request->header('Authorization');
 
-        if (empty($providedToken)) {
-            Log::warning('API request made without token');
-            return response()->json([
-                'message' => 'No API token provided',
-                'error' => 'Authorization header missing or empty'
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        // Token statis yang digunakan
+        $staticToken = 'Bearer lead-management-token-2025';
 
-        if ($providedToken !== $expectedToken) {
-            Log::warning('API request made with invalid token');
-            return response()->json([
-                'message' => 'Invalid API token',
-                'error' => 'The provided API token is not valid'
-            ], Response::HTTP_UNAUTHORIZED);
+        if (!$token || $token !== $staticToken) {
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         return $next($request);

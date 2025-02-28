@@ -11,7 +11,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('AuthService', function ($app) {
+        $this->app->singleton('app.token', function ($app) {
             return new class(env('API_TOKEN', 'secret')) {
                 private $token;
 

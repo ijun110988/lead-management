@@ -1,14 +1,18 @@
 <?php
 
-use App\Http\Controllers\API\LeadController;
+use App\Http\Controllers\LeadController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\StaticTokenMiddleware;
 
-Route::middleware(['api.token', 'throttle:60,1'])->group(function () {
+Route::middleware([StaticTokenMiddleware::class])->group(function () {
     Route::post('/leads', [LeadController::class, 'store']);
     Route::get('/leads', [LeadController::class, 'index']);
-    Route::get('/leads/{id}', [LeadController::class, 'show']);
-    Route::put('/leads/{id}', [LeadController::class, 'update']);
-    Route::delete('/leads/{id}', [LeadController::class, 'destroy']);
+    Route::get('/leads/{lead}', [LeadController::class, 'show']);
+    Route::put('/leads/{lead}', [LeadController::class, 'update']);
+    Route::delete('/leads/{lead}', [LeadController::class, 'destroy']);
 });
 
-// Route::get('/leads', [LeadController::class, 'index'])->middleware('api.token');
+Route::get('/test-data', function () {
+    return response()->json(['message' => 'Access granted']);
+})->middleware(StaticTokenMiddleware::class);
+

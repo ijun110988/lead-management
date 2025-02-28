@@ -156,3 +156,164 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 		}
 	}
 endif;
+
+function lead_capture_form() {
+    ob_start(); ?>
+    
+    <div class="lead-form-container">
+        <h2>Dapatkan Penawaran Terbaik!</h2>
+        <p>Isi formulir di bawah ini dan kami akan segera menghubungi Anda.</p>
+
+        <form id="lead-form" action="#" method="POST">
+            <div class="form-group">
+                <label for="name">Nama:</label>
+                <input type="text" id="name" name="name" required placeholder="Masukkan Nama Anda">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required placeholder="Masukkan Email Anda">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Nomor Telepon:</label>
+                <input type="text" id="phone" name="phone" required placeholder="Masukkan Nomor HP">
+            </div>
+
+            <div class="form-group">
+                <label for="source">Sumber (UTM Campaign):</label>
+                <input type="text" id="source" name="source" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Pesan:</label>
+                <textarea id="message" name="message" placeholder="Tulis pesan Anda..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Kirim</button>
+            <p id="form-message"></p>
+        </form>
+    </div>
+
+    <script>
+    function getUTMParameter(name) {
+        let urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    let utmSource = getUTMParameter("utm_campaign") || "Tiktok";
+    document.getElementById("source").value = utmSource;
+
+    document.getElementById("lead-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        let formData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            source: document.getElementById("source").value,
+            message: document.getElementById("message").value
+        };
+
+        fetch("http://localhost:8000/api/leads", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer lead-management-token-2025"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.id) {
+                document.getElementById("form-message").innerText = "✅ Pesan  berhasil dikirim!";
+                document.getElementById("form-message").style.color = "green";
+                document.getElementById("lead-form").reset();
+            } else {
+                document.getElementById("form-message").innerText = "❌ Gagal mengirim, coba lagi!";
+                document.getElementById("form-message").style.color = "red";
+            }
+        })
+        .catch(error => {
+            document.getElementById("form-message").innerText = "⚠️ Terjadi kesalahan, coba lagi!";
+            document.getElementById("form-message").style.color = "red";
+            console.error("Error:", error);
+        });
+    });
+    </script>
+
+    <style>
+        .lead-form-container {
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 25px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .lead-form-container h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .lead-form-container p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #0073aa;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #005177;
+        }
+
+        #form-message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('lead_capture_form', 'lead_capture_form');

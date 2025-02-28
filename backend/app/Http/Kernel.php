@@ -14,6 +14,7 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'api' => [
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // \App\Http\Middleware\ApiTokenMiddleware::class,
         ],
         'web' => [
             \Illuminate\Cookie\Middleware\EncryptCookies::class,
@@ -26,6 +27,8 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
-        'api.token' => \App\Http\Middleware\StaticTokenMiddleware::class,
+        // 'auth' => \App\Http\Middleware\Authenticate::class,
+        // 'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'static.token' => \App\Http\Middleware\StaticTokenMiddleware::class,
     ];
 }
