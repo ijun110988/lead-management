@@ -94,8 +94,3 @@ Jika ada kendala saat menjalankan:
    ```sh
    docker-compose down && docker-compose up -d --build
    ```
-
----
-
-✨ **Proyek ini siap digunakan!** 🚀 Jika ada pertanyaan, silakan hubungi saya. 😃
-
