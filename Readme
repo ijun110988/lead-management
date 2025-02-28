@@ -1,38 +1,38 @@
 # Lead Management API & WordPress Form
 
-## 📌 Overview
+## Overview
 Proyek ini adalah sistem **Lead Management API** berbasis **Laravel** yang dilindungi oleh **Bearer Token** statis dan digunakan untuk menangani prospek (leads). Formulir di **WordPress** digunakan untuk mengumpulkan data prospek dan mengirimkannya ke API Laravel.
 
-## 🛠️ Teknologi yang Digunakan
+## Teknologi yang Digunakan
 - **Laravel** (API Backend)
 - **WordPress** (Frontend & Formulir Prospek)
 - **Postgree** (Database)
 - **Docker & Docker Compose** (Deployment)
 
-## 🚀 Cara Menjalankan Proyek dengan Docker Compose
-### 1️⃣ **Clone Repository**
+##  Cara Menjalankan Proyek dengan Docker Compose
+### 1️ **Clone Repository**
 ```sh
 git clone https://github.com/username/repository.git
 cd repository
 ```
 
-### 2️⃣ **Jalankan Docker Compose**
+### 2️ **Jalankan Docker Compose**
 ```sh
 docker-compose up -d --build
 ```
 
-### 3️⃣ **Akses Aplikasi**
+### 3️ **Akses Aplikasi**
 - **API Laravel:** [http://localhost:8000](http://localhost:8000)
 - **WordPress:** [http://localhost](http://localhost)
 - **phpMyAdmin (Opsional):** [http://localhost:8080](http://localhost:8080)
 
-## 🔑 API Authentication (Bearer Token)
+##  API Authentication (Bearer Token)
 Semua request ke API harus menggunakan **Bearer Token** statis:
 ```sh
 Authorization: Bearer lead-management-token-2025
 ```
 
-## 📋 API Endpoints
+##  API Endpoints
 | Method | Endpoint | Deskripsi |
 |--------|---------|-----------|
 | `POST` | `/api/leads` | Menyimpan lead baru |
@@ -55,7 +55,7 @@ curl --location 'http://localhost:8000/api/leads' \
 }'
 ```
 
-## 🎨 Formulir WordPress
+##  Formulir WordPress
 Form ini digunakan untuk menangkap prospek dan mengirimkannya ke API Laravel.
 
 ### **Fitur Formulir**
@@ -74,7 +74,7 @@ Form ini digunakan untuk menangkap prospek dan mengirimkannya ke API Laravel.
    ```
 3. Jika berhasil, field "Sumber" otomatis akan terisi dengan "FacebookAds".
 
-## 🔄 Migrasi Database Laravel
+##  Migrasi Database Laravel
 Jika perlu menjalankan ulang database:
 ```sh
 docker-compose exec app php artisan migrate --seed
