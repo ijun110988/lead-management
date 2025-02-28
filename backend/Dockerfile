@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install dependencies before copying full source code
+RUN composer install --no-dev --optimize-autoloader
+
 # Copy Laravel project
 COPY . /var/www
 
