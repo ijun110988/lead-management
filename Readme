@@ -17,14 +17,12 @@ cd repository
 ```
 
 ### 2️ **Jalankan Docker Compose**
-```sh
 docker-compose up -d --build
 ```
 
 ### 3️ **Akses Aplikasi**
 - **API Laravel:** [http://localhost:8000](http://localhost:8000)
-- **WordPress:** [http://localhost](http://localhost)
-- **phpMyAdmin (Opsional):** [http://localhost:8080](http://localhost:8080)
+- **WordPress:** [http://localhost:8081](http://localhost:8081)
 
 ##  API Authentication (Bearer Token)
 Semua request ke API harus menggunakan **Bearer Token** statis:
@@ -70,7 +68,7 @@ Form ini digunakan untuk menangkap prospek dan mengirimkannya ke API Laravel.
    ```
 2. Pastikan halaman diakses dengan UTM Parameter, misalnya:
    ```sh
-   http://localhost/lead-form?utm_campaign=FacebookAds
+   http://localhost:8081?utm_campaign=FacebookAds
    ```
 3. Jika berhasil, field "Sumber" otomatis akan terisi dengan "FacebookAds".
 
